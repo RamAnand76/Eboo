@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        body {
+            background-color: #f1f1f1;
+        }
+        .profile-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        .profile-form {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .profile-pic {
+            display: block;
+            margin: auto;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .user-details {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .user-details h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .user-details p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .w3-animate-zoom {
+            animation: animatezoom 0.6s;
+        }
+        @keyframes animatezoom {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+    </style>
+    <script>
+        // Function to hide messages after a delay
+        function hideMessages() {
+            var messages = document.getElementsByClassName('message');
+            setTimeout(function() {
+                for (var i = 0; i < messages.length; i++) {
+                    messages[i].style.display = 'none';
+                }
+            }, 5000);  // Adjust time as needed (5000 milliseconds = 5 seconds)
+        }
+
+        // Call hideMessages function on page load
+        window.onload = function() {
+            hideMessages();
+        };
+    </script>
+</head>
+<body>
+
+<div class="w3-container w3-center w3-animate-opacity">
+    <h2>Profile</h2>
+</div>
+
+<div class="w3-container profile-container w3-animate-zoom">
+    <img src="{{ user_profile.profileimg.url }}" alt="Profile Picture" class="profile-pic">
+    <div class="user-details">
+        <h3>{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}</h3>
+        <p>Location: {{ user_profile.location }}</p>
+        <p>User Type: {{ user_type }}</p>
+    </div>
+    <form class="w3-container profile-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="w3-section">
+            <label for="id_profileimg" class="w3-label"><b>Change Profile Image</b></label>
+            {{ form.profileimg }}
+        </div>
+        <div class="w3-section">
+            <label for="id_location" class="w3-label"><b>Location</b></label>
+            {{ form.location }}
+        </div>
+        <div class="w3-section">
+            <label for="id_user_type" class="w3-label"><b>User Type</b></label>
+            {{ form.user_type }}
+        </div>
+        <button class="w3-button w3-block w3-green w3-padding-large w3-margin-bottom" type="submit">Update Profile</button>
+        <div class="w3-container w3-center">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="w3-panel w3-red w3-round w3-padding-small w3-animate-opacity message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
