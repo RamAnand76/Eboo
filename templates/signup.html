@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        body {
+            background-color: #f1f1f1;
+        }
+        .signup-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        .signup-form {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .w3-animate-zoom {
+            animation: animatezoom 0.6s;
+        }
+        @keyframes animatezoom {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+    </style>
+    <script>
+        // Function to hide messages after a delay
+        function hideMessages() {
+            var messages = document.getElementsByClassName('message');
+            setTimeout(function() {
+                for (var i = 0; i < messages.length; i++) {
+                    messages[i].style.display = 'none';
+                }
+            }, 5000);  // Adjust time as needed (5000 milliseconds = 5 seconds)
+        }
+
+        // Call hideMessages function on page load
+        window.onload = function() {
+            hideMessages();
+        };
+    </script>
+</head>
+<body>
+
+<div class="w3-container w3-center w3-animate-opacity">
+    <h2>Sign Up</h2>
+</div>
+
+<div class="w3-container signup-container w3-animate-zoom">
+    <form class="w3-container signup-form" method="POST">
+        {% csrf_token %}
+        <div class="w3-section">
+            <label for="id_username" class="w3-label"><b>Username</b></label>
+            <input type="text" id="id_username" name="username" class="w3-input" required>
+        </div>
+        <div class="w3-section">
+            <label for="id_email" class="w3-label"><b>Email</b></label>
+            <input type="email" id="id_email" name="email" class="w3-input" required>
+        </div>
+        <div class="w3-section">
+            <label for="id_first_name" class="w3-label"><b>First Name</b></label>
+            <input type="text" id="id_first_name" name="first_name" class="w3-input" required>
+        </div>
+        <div class="w3-section">
+            <label for="id_last_name" class="w3-label"><b>Last Name</b></label>
+            <input type="text" id="id_last_name" name="last_name" class="w3-input" required>
+        </div>
+        <div class="w3-section">
+            <label for="id_password" class="w3-label"><b>Password</b></label>
+            <input type="password" id="id_password" name="password" class="w3-input" required>
+        </div>
+        <div class="w3-section">
+            <label for="id_password2" class="w3-label"><b>Confirm Password</b></label>
+            <input type="password" id="id_password2" name="password2" class="w3-input" required>
+        </div>
+        <button class="w3-button w3-block w3-green w3-padding-large w3-margin-bottom" type="submit">Sign Up</button>
+        <div class="w3-container w3-center">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="w3-panel w3-red w3-round w3-padding-small w3-animate-opacity message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </form>
+    <div class="w3-container w3-center">
+        <p>Already have an account? <a href="{% url 'signin' %}">Sign In</a></p>
+    </div>
+</div>
+
+</body>
+</html>
