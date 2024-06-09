@@ -35,6 +35,12 @@
             color: #fff;
             text-decoration: none;
             margin-left: 20px;
+            font-family: 'Montserrat', sans-serif;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ddd;
         }
 
         .hero {
@@ -52,6 +58,34 @@
         .hero h1 {
             font-size: 48px;
             margin-bottom: 20px;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            background-color: #555;
         }
 
         .book-grid {
@@ -94,6 +128,35 @@
         .book-card button:hover {
             background-color: #555;
         }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #666;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .no-results h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .no-results p {
+            font-size: 16px;
+            color: #777;
+        }
+
+        .no-results img {
+            max-width: 100px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -115,26 +178,31 @@
         </div>
     </div>
 
-    <div class="book-grid">
-        <div class="book-card">
-            <img src="https://source.unsplash.com/400x600/?book" alt="Book Cover">
-            <h3>Book Title</h3>
-            <p>Author Name</p>
-            <button>Buy Now</button>
-        </div>
-        <div class="book-card">
-            <img src="https://source.unsplash.com/400x600/?book" alt="Book Cover">
-            <h3>Book Title</h3>
-            <p>Author Name</p>
-            <button>Buy Now</button>
-        </div>
-        <div class="book-card">
-            <img src="https://source.unsplash.com/400x600/?book" alt="Book Cover">
-            <h3>Book Title</h3>
-            <p>Author Name</p>
-            <button>Buy Now</button>
-        </div>
+    <div class="search-bar">
+        <form method="get" action="{% url 'home' %}">
+            <input type="text" name="search" placeholder="Search for ebooks by title">
+            <button type="submit">Search</button>
+        </form>
     </div>
+
+    {% if books %}
+        <div class="book-grid">
+            {% for book in books %}
+                <div class="book-card">
+                    <img src="{{ book.thumbnail.url }}" alt="Book Cover">
+                    <h3>{{ book.title }}</h3>
+                    <p>{{ book.author }}</p>
+                    <button>Buy Now</button>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-results">
+            <img src="{% static 'images/no-results.png' %}" alt="No Results">
+            <h2>Item not found</h2>
+            <p>Sorry, we couldn't find any ebooks matching your search.</p>
+        </div>
+    {% endif %}
     
 </body>
 </html>

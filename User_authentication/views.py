@@ -1,6 +1,8 @@
 import re
 from django.shortcuts import render, redirect
 from django.contrib import messages
+
+from Publish.models import Ebook
 from .models import Profile
 from .forms import ProfileUpdateForm
 from django.contrib.auth.models import User, auth
@@ -102,7 +104,12 @@ def profile(request):
 
 @login_required(login_url="signin") 
 def index(request):
-    return render(request, 'home.html')
+    query = request.GET.get('search')
+    if query:
+        books = Ebook.objects.filter(title__icontains=query)
+    else:
+        books = Ebook.objects.all()
+    return render(request, 'home.html', {'books': books})
 
 @login_required(login_url="signin")    
 def logout(request):
