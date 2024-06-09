@@ -9,21 +9,81 @@
     <style>
         body {
             background-color: #f1f1f1;
+            font-family: 'Montserrat', sans-serif;
         }
+
         .login-container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-        }
-        .login-form {
+            max-width: 900px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             background-color: white;
-            padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .w3-animate-zoom {
+            overflow: hidden;
             animation: animatezoom 0.6s;
         }
+
+        .login-image {
+            background-image: url('https://source.unsplash.com/800x600/?books,library');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .login-form-container {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .login-form .w3-section {
+            margin-bottom: 20px;
+        }
+
+        .login-form .w3-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .login-form .w3-input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .login-form button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .login-form button:hover {
+            background-color: #555;
+            transform: translateY(-3px);
+        }
+
+        .login-form button:active {
+            transform: translateY(-1px);
+        }
+
+        .login-form .message {
+            margin-top: 20px;
+            animation: fadeIn 0.5s;
+        }
+
         @keyframes animatezoom {
             from {
                 transform: scale(0);
@@ -32,19 +92,31 @@
                 transform: scale(1);
             }
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
     <script>
-        // Function to hide messages after a delay
         function hideMessages() {
             var messages = document.getElementsByClassName('message');
             setTimeout(function() {
                 for (var i = 0; i < messages.length; i++) {
                     messages[i].style.display = 'none';
                 }
-            }, 5000);  // Adjust time as needed (5000 milliseconds = 5 seconds)
+            }, 5000);
         }
 
-        // Call hideMessages function on page load
         window.onload = function() {
             hideMessages();
         };
@@ -56,28 +128,31 @@
     <h2>Login</h2>
 </div>
 
-<div class="w3-container login-container w3-animate-zoom">
-    <form class="w3-container login-form" method="POST">
-        {% csrf_token %}
-        <div class="w3-section">
-            <label for="id_username" class="w3-label"><b>Username</b></label>
-            <input type="text" id="id_username" name="username" class="w3-input" required>
+<div class="login-container">
+    <div class="login-image"></div>
+    <div class="login-form-container">
+        <form class="login-form" method="POST">
+            {% csrf_token %}
+            <div class="w3-section">
+                <label for="id_username" class="w3-label"><b>Username</b></label>
+                <input type="text" id="id_username" name="username" class="w3-input" required>
+            </div>
+            <div class="w3-section">
+                <label for="id_password" class="w3-label"><b>Password</b></label>
+                <input type="password" id="id_password" name="password" class="w3-input" required>
+            </div>
+            <button class="w3-button w3-block w3-green w3-padding-large w3-margin-bottom" type="submit">Login</button>
+            <div class="w3-container w3-center">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="w3-panel w3-red w3-round w3-padding-small w3-animate-opacity message">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </form>
+        <div class="signup-link">
+            <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
         </div>
-        <div class="w3-section">
-            <label for="id_password" class="w3-label"><b>Password</b></label>
-            <input type="password" id="id_password" name="password" class="w3-input" required>
-        </div>
-        <button class="w3-button w3-block w3-green w3-padding-large w3-margin-bottom" type="submit">Login</button>
-        <div class="w3-container w3-center">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="w3-panel w3-red w3-round w3-padding-small w3-animate-opacity message">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        </div>
-    </form>
-    <div class="w3-container w3-center">
-        <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
     </div>
 </div>
 

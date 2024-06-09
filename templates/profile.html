@@ -6,108 +6,210 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="{% static 'css/w3.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #f1f1f1;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
         }
-        .profile-container {
-            max-width: 600px;
-            margin: auto;
+
+        header {
+            background-color: #333;
+            color: #fff;
             padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .profile-form {
-            background-color: white;
-            padding: 40px;
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-family: 'Montserrat', sans-serif;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ddd;
+        }
+
+        .profile-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            grid-gap: 20px;
+            animation: fadeIn 1s ease-in-out;
         }
-        .profile-pic {
-            display: block;
-            margin: auto;
+
+        .profile-image {
+            text-align: center;
+        }
+
+        .profile-image img {
             width: 150px;
             height: 150px;
             border-radius: 50%;
             object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-image img:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-form h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .profile-form .w3-section {
             margin-bottom: 20px;
         }
-        .user-details {
-            text-align: center;
-            margin-bottom: 20px;
+
+        .profile-form .w3-label {
+            font-weight: bold;
+            margin-bottom: 5px;
         }
-        .user-details h3 {
-            margin: 0;
-            font-size: 1.5em;
+
+        .profile-form .w3-input, .profile-form .w3-select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
         }
-        .user-details p {
-            margin: 5px 0;
-            color: #666;
+
+        .profile-form button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
-        .w3-animate-zoom {
-            animation: animatezoom 0.6s;
+
+        .profile-form button:hover {
+            background-color: #555;
+            transform: translateY(-3px);
         }
-        @keyframes animatezoom {
+
+        .profile-form button:active {
+            transform: translateY(-1px);
+        }
+
+        .messages {
+            margin-top: 20px;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            animation: fadeIn 0.5s;
+        }
+
+        .message-success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+
+        .message-error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+
+        @keyframes fadeIn {
             from {
-                transform: scale(0);
+                opacity: 0;
             }
             to {
-                transform: scale(1);
+                opacity: 1;
             }
         }
     </style>
     <script>
-        // Function to hide messages after a delay
         function hideMessages() {
             var messages = document.getElementsByClassName('message');
             setTimeout(function() {
                 for (var i = 0; i < messages.length; i++) {
                     messages[i].style.display = 'none';
                 }
-            }, 5000);  // Adjust time as needed (5000 milliseconds = 5 seconds)
+            }, 5000);
         }
 
-        // Call hideMessages function on page load
         window.onload = function() {
             hideMessages();
         };
     </script>
 </head>
 <body>
+    <header>
+        <div class="logo">EBook Paradise</div>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="#">Categories</a>
+            <a href="{% url 'publish_ebook' %}">Publish Your Ebook</a>
+            <a href="{% url 'profile' %}">My Profile</a>
+            <a href="{% url 'logout' %}">Log Out ({{ user.username }})</a>
+        </nav>
+    </header>
 
-<div class="w3-container w3-center w3-animate-opacity">
-    <h2>Profile</h2>
-</div>
-
-<div class="w3-container profile-container w3-animate-zoom">
-    <img src="{{ user_profile.profileimg.url }}" alt="Profile Picture" class="profile-pic">
-    <div class="user-details">
-        <h3>{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}</h3>
-        <p>Location: {{ user_profile.location }}</p>
-        <p>User Type: {{ user_type }}</p>
+    <div class="profile-container">
+        <div class="profile-image">
+            <img src="{{ user_profile.profileimg.url }}" alt="Profile Picture">
+        </div>
+        <div class="profile-form">
+            <h2>Update Profile</h2>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="w3-section">
+                    <label for="profileimg" class="w3-label">Profile Image</label>
+                    <input type="file" id="profileimg" name="profileimg" class="w3-input">
+                </div>
+                <div class="w3-section">
+                    <label for="location" class="w3-label">Location</label>
+                    <input type="text" id="location" name="location" value="{{ form.location.value }}" class="w3-input">
+                </div>
+                <div class="w3-section">
+                    <label for="user_type" class="w3-label">User Type</label>
+                    <select id="user_type" name="user_type" class="w3-select">
+                        {% for value, name in form.user_type.field.choices %}
+                            <option value="{{ value }}" {% if form.user_type.value == value %}selected{% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit">Update Profile</button>
+                <div class="messages">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="message {% if message.tags %}message-{{ message.tags }}{% endif %}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </form>
+        </div>
     </div>
-    <form class="w3-container profile-form" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="w3-section">
-            <label for="id_profileimg" class="w3-label"><b>Change Profile Image</b></label>
-            {{ form.profileimg }}
-        </div>
-        <div class="w3-section">
-            <label for="id_location" class="w3-label"><b>Location</b></label>
-            {{ form.location }}
-        </div>
-        <div class="w3-section">
-            <label for="id_user_type" class="w3-label"><b>User Type</b></label>
-            {{ form.user_type }}
-        </div>
-        <button class="w3-button w3-block w3-green w3-padding-large w3-margin-bottom" type="submit">Update Profile</button>
-        <div class="w3-container w3-center">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="w3-panel w3-red w3-round w3-padding-small w3-animate-opacity message">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        </div>
-    </form>
-</div>
-
 </body>
 </html>
